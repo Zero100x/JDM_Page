@@ -1,0 +1,25 @@
+name: Auto-merge PRs to develop
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - develop
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: github.base_ref == 'develop' && startsWith(github.head_ref, 'feature/')
+    
+    steps:
+      - name: Enable auto-merge
+        run: |
+          echo "Auto-merge activado para PRs a develop desde feature branches"
+        
+      - name: Auto-merge PR
+        uses: pascalgn/automerge-action@v0.16.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: squash
+          MERGE_LABELS: ""
+          MERGE_DELETE_BRANCH: true
